@@ -21,7 +21,7 @@ typedef struct DicoABR {
 
 
 NodeABR *rechercheMot(char *mot, DicoABR *dico);
-DicoABR initdico ();
+DicoABR *initdico ();
 void afficherNode(NodeABR *node);
 NodeABR *initNode(char *value);
 NodeABR *ajoutMot(char *value, DicoABR *dico);
@@ -44,24 +44,24 @@ int main(){
 
 
 
-	DicoABR dictionnaire = initdico();
-	ajoutMot("final", &dictionnaire);
-	ajoutMot("final", &dictionnaire);
-	ajoutMot("ou", &dictionnaire);
-	ajoutMot("fin", &dictionnaire);
-	ajoutMot("as", &dictionnaire);
-	NodeABR *node = ajoutMot("finaux", &dictionnaire);
+	DicoABR *dictionnaire = initdico();
+	ajoutMot("final", dictionnaire);
+	ajoutMot("final", dictionnaire);
+	ajoutMot("ou", dictionnaire);
+	ajoutMot("fin", dictionnaire);
+	ajoutMot("as", dictionnaire);
+	NodeABR *node = ajoutMot("finaux", dictionnaire);
 
 	printf("test : %d \n", compare_souschaine(node, "firoule"));
 
-	rechercheMot("finar", &dictionnaire);
-	rechercheMot("ou", &dictionnaire);
-	supprimeMot("finar", &dictionnaire);
-	supprimeMot("fin", &dictionnaire);
+	rechercheMot("finar", dictionnaire);
+	rechercheMot("ou", dictionnaire);
+	supprimeMot("finar", dictionnaire);
+	supprimeMot("fin", dictionnaire);
 
-	displayDico(dictionnaire.root);
+	displayDico(dictionnaire->root);
 	printf("----------------------------------------------------------\n");
-	suggestionMots(3, &dictionnaire, "fi");
+	suggestionMots(3, dictionnaire, "fi");
 
 	return 0;
 }
@@ -70,12 +70,12 @@ int main(){
 
 
 
-DicoABR initdico ()
+DicoABR *initdico ()
 //Initialise le dictionnaire
 {
-	DicoABR new ;//= malloc(sizeof(DicoABR));
-	new.root = NULL;
-	new.nb = 0;
+	DicoABR new = malloc(sizeof(DicoABR));
+	new->root = NULL;
+	new->nb = 0;
 	printf("Création de dictionnaire\n");
 	return new;
 }
