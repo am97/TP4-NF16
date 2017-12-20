@@ -73,7 +73,7 @@ int main(){
 DicoABR *initdico ()
 //Initialise le dictionnaire
 {
-	DicoABR new = malloc(sizeof(DicoABR));
+	DicoABR *new = malloc(sizeof(DicoABR));
 	new->root = NULL;
 	new->nb = 0;
 	printf("Création de dictionnaire\n");
