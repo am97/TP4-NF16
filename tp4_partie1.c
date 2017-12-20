@@ -57,6 +57,7 @@ int main(){
 
 	rechercheMot("finar", dictionnaire);
 	rechercheMot("ou", dictionnaire);
+	afficherDico(dictionnaire->root, 0);
 	supprimeMot("finar", dictionnaire);
 	supprimeMot("fin", dictionnaire);
 	afficherDico(dictionnaire->root, 0);
@@ -192,43 +193,19 @@ void supprimeMot(char *mot, DicoABR *dico)
 
         printf("supprimeMot: mot=%s dico->root->cle=%s\n",mot,dico->root->cle);
         NodeABR *node = rechercheMot(mot, dico);
-        NodeABR *parent, *fils_gauche, *fils_droit;
-        int compare=0, pas_de_fils=0, juste_un_fils_gauche=0, juste_un_fils_droit=0, deux_fils=0;
+        int compare=0, pas_de_parent=0, pas_de_fils=0, juste_un_fils_gauche=0, juste_un_fils_droit=0, deux_fils=0;
 
         if (node!=NULL){
-                printf("node->cle=%s\n",node->cle);
-                if (node->parent != NULL){
-                        printf("parent '%s'\n", node->parent->cle);
-                        parent=node->parent;
-                }
-                else{
-                        printf("Pas de parent\n");
-                        parent=NULL;
-                }
-                if (node->left != NULL){
-                        printf("fils gauche '%s'\n", node->left->cle);
-                        fils_gauche=node->left;
-                }
-                else{
-                        printf("Pas de fils gauche.\n");
-                        fils_gauche=NULL;
-                }
-                if (node->right != NULL){
-                        printf("fils droit '%s'\n\n", node->right->cle);
-                        fils_droit=node->right;
-                }
-                else{
-                        printf("Pas de fils droit\n\n");
-                        fils_droit=NULL;
-                }
+		printf("node->cle=%s\n",node->cle);
+		if(node->parent==NULL) pas_de_parent=1;
 
-                if(fils_gauche==NULL && fils_droit==NULL) pas_de_fils=1;
-                else if(fils_gauche==NULL) juste_un_fils_droit=1;
-                else if(fils_droit==NULL) juste_un_fils_gauche=1;
+                if(node->left==NULL && node->right==NULL) pas_de_fils=1;
+                else if(node->left==NULL) juste_un_fils_droit=1;
+                else if(node->right==NULL) juste_un_fils_gauche=1;
                 else deux_fils=1;
 
         if(pas_de_fils == 0){    // Si le node à supprimer possède au moins un fils
-                compare = strcasecmp(node->cle,parent->cle);
+                compare = strcasecmp(node->cle,node->parent->cle);
                 
                 if(compare<0){
                         printf("c'est le fils gauche\n");
