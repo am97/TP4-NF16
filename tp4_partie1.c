@@ -21,7 +21,7 @@ typedef struct DicoABR {
 
 
 NodeABR *rechercheMot(char *mot, DicoABR *dico);
-DicoABR initdico ();
+DicoABR *initdico ();
 void afficherNode(NodeABR *node);
 NodeABR *initNode(char *value);
 NodeABR *ajoutMot(char *value, DicoABR *dico);
@@ -34,28 +34,35 @@ NodeABR **compare_k(NodeABR *root, int k, char *souschaine);
 void afficherNodeTab(NodeABR **nodeTab);
 int max (int a, int b, int c);
 
+void supprimeMot(char *mot, DicoABR *dico);
+void supprimerNode(NodeABR *node);
+NodeABR *successeur_plus_proche(NodeABR *node);
+void afficherDico(NodeABR *root, int nb_tab);
+
 
 // --------------------- Testing purposes ---------------------------------
 int main(){
 
 
 
-	DicoABR dictionnaire = initdico();
-	ajoutMot("final", &dictionnaire);
-	ajoutMot("final", &dictionnaire);
-	ajoutMot("ou", &dictionnaire);
-	ajoutMot("fin", &dictionnaire);
-	ajoutMot("as", &dictionnaire);
-	NodeABR *node = ajoutMot("finaux", &dictionnaire);
+	DicoABR *dictionnaire = initdico();
+	ajoutMot("final", dictionnaire);
+	ajoutMot("final", dictionnaire);
+	ajoutMot("ou", dictionnaire);
+	ajoutMot("fin", dictionnaire);
+	ajoutMot("as", dictionnaire);
+	NodeABR *node = ajoutMot("finaux", dictionnaire);
 
 	printf("test : %d \n", compare_souschaine(node, "firoule"));
 
-	rechercheMot("finar", &dictionnaire);
-	rechercheMot("ou", &dictionnaire);
+	rechercheMot("finar", dictionnaire);
+	rechercheMot("ou", dictionnaire);
+	supprimeMot("finar", dictionnaire);
+	supprimeMot("fin", dictionnaire);
+	afficherDico(dictionnaire->root, 0);
 
-	displayDico(dictionnaire.root);
 	printf("----------------------------------------------------------\n");
-	suggestionMots(3, &dictionnaire, "fi");
+	suggestionMots(3, dictionnaire, "fi");
 
 	return 0;
 }
@@ -64,12 +71,12 @@ int main(){
 
 
 
-DicoABR initdico ()
+DicoABR *initdico ()
 //Initialise le dictionnaire
 {
-	DicoABR new ;//= malloc(sizeof(DicoABR));
-	new.root = NULL;
-	new.nb = 0;
+	DicoABR *new = malloc(sizeof(DicoABR));
+	new->root = NULL;
+	new->nb = 0;
 	printf("Création de dictionnaire\n");
 	return new;
 }
@@ -289,14 +296,18 @@ void afficherNode(NodeABR *node)
 	
 }
 
-
-void displayDico (NodeABR *node)
+void afficherDico(NodeABR *root, int nb_tab)
 {
-	if (node->left != NULL)
-		displayDico (node->left);
-	if (node->right != NULL)
-		displayDico (node->right);
-	printf ("     %s\n", node->cle);
+	int i = 0;
+	NodeABR *n1=root->left;
+	NodeABR *n2=root->right;
+	for (i=0; i<nb_tab; i++){
+		printf("    ");
+	}
+	printf("├── ");
+	printf("%s\n", root->cle);
+	if(n1 != NULL) afficherDico(n1, nb_tab + 1);
+	if(n2 != NULL) afficherDico(n2, nb_tab + 1);
 }
 
 //--------------------------------Suggestion mots ---------------------------------
