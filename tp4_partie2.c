@@ -24,15 +24,16 @@ typedef Cell *Dico;
 
 //--------------Fonctions--------------------
 
-Dico initDico2(Dico dico, Mot mot);
+Dico initpDico(Dico dico, Mot mot);
 void afficheMot(Mot mot);
 Mot initMot(char *string);
 Dico searchBeginCell(Dico dico, Mot mot);
 Dico prefixeMot(Dico dico, Mot mot);
-int rechercheMot(Dico dico, Mot mot);
+int rechercheMot2(Dico dico, Mot mot);
 Dico ajoutMot2(Mot mot, Dico dico);
 Mot idprefixeMot(Dico dico, Mot mot);
-Dico supprimeMot(Mot mot, Dico dico);
+Dico supprimeMot2(Mot mot, Dico dico);
+
 
 
 //----------Main: testing--------------------
@@ -45,25 +46,26 @@ int main() {
 	Mot mot4 = initMot("avare");
 	printf("---------------------------------------------\n");
 	dico = initpDico(dico, mot);
-	rechercheMot(dico, mot);
+	rechercheMot2(dico, mot);
 
 	prefixeMot(dico, mot3);
-	rechercheMot(dico, mot);
+	rechercheMot2(dico, mot);
 	dico=ajoutMot2(mot2, dico);
-	rechercheMot(dico, mot2);
+	rechercheMot2(dico, mot2);
 
 	dico=ajoutMot2(mot3, dico);
-	rechercheMot(dico, mot3);
+	rechercheMot2(dico, mot3);
 	dico=ajoutMot2(mot4, dico);
-	rechercheMot(dico, mot4);
+	rechercheMot2(dico, mot4);
 	printf("---------------------------------------------\n");
-	dico=supprimeMot(mot3, dico);
+	dico=supprimeMot2(mot3, dico);
 	printf("---------------------------------------------\n");
-	rechercheMot(dico, mot3);
+	rechercheMot2(dico, mot3);
 
 
 	return 0;
 }
+
 
 //----------Def fonctions-------------------
 Mot initMot(char *string)
@@ -97,7 +99,7 @@ Mot initMot(char *string)
 }
 
 
-Dico initDico2(Dico dico, Mot mot)
+Dico initpDico(Dico dico, Mot mot)
 {
 	//Allouer l'espace pour le dico
 	dico = malloc(sizeof(Dico));
@@ -137,7 +139,7 @@ void afficheMot(Mot mot)
 	printf("\n");
 }
 
-int rechercheMot(Dico dico, Mot mot)
+int rechercheMot2(Dico dico, Mot mot)
 {
 	printf("RECHERCHE Mot : ");
 	afficheMot(mot);
@@ -146,12 +148,12 @@ int rechercheMot(Dico dico, Mot mot)
 		if (prefixe->c == '$'){
 			printf("RECHERCHE: Mot trouvé !\n");
 			return 1;
-		}
-	}
-
-	else{
-		printf("RECHERCHE: Mot non trouvé !\n");
+		} else {
+			printf("RECHERCHE: Mot non trouvé !\n");
 		return 0;
+		}
+	}else{
+		
 	}
 
 }
@@ -169,12 +171,12 @@ Dico ajoutMot2(Mot mot, Dico dico)
 	} 
 
 	if (dico == NULL){
-		dico = initDico2(dico, mot);
+		dico = initpDico(dico, mot);
 		printf("AJOUT: retourne %c\n\n", dico->c);
 		return dico;
 	}
 
-	if (rechercheMot(dico, mot) == 1){
+	if (rechercheMot2(dico, mot) == 1){
 		printf("AJOUT: mot déjà présent.\n");
 		printf("AJOUT: retourne %c\n\n", dico->c);
 		return dico;
@@ -188,7 +190,7 @@ Dico ajoutMot2(Mot mot, Dico dico)
 	if (pDico == NULL){
 		printf("AJOUT: Pas de mot commençant par cette lettre.\n");
 		pDico = dico;
-		dico = initDico2(dico, mot);
+		dico = initpDico(dico, mot);
 		dico->alt = pDico;
 		printf("AJOUT: retourne %c\n\n", dico->c);
 		return dico;
@@ -214,13 +216,13 @@ Dico ajoutMot2(Mot mot, Dico dico)
 
 		if (pDico->alt == NULL){ 
 			printf("AJOUT: le mot doit être placé à la fin de la série de alt.\n");
-			pDico->alt=initDico2(pDico->alt, pMot);
+			pDico->alt=initpDico(pDico->alt, pMot);
 			printf("AJOUT: retourne %c\n\n", pDico->alt->c);
 			return dico;
 		} else { 
 			printf("AJOUT: on place le mot à sa place.\n");
 			temp = pDico->alt;
-			pDico->alt=initDico2(pDico->alt, pMot);
+			pDico->alt=initpDico(pDico->alt, pMot);
 			pDico->alt->alt = temp;
 			printf("AJOUT: retourne %c\n\n", dico->c);
 			return dico;
@@ -340,11 +342,10 @@ Mot idprefixeMot(Dico dico, Mot mot)
 
 }
 
-
-Dico supprimeMot(Mot mot, Dico dico)
+Dico supprimeMot2(Mot mot, Dico dico)
 {
 	printf("SUPPRIME: Début\n");
-	if (rechercheMot(dico, mot) == 0){
+	if (rechercheMot2(dico, mot) == 0){
 		printf("SUPPRIME: le mot n'est pas dans le dico, impossible de le supprimer!\n");
 		return dico;
 	}
