@@ -32,6 +32,7 @@ Dico prefixeMot(Dico dico, Mot mot);
 int rechercheMot(Dico dico, Mot mot);
 Dico ajoutMot2(Mot mot, Dico dico);
 Mot idprefixeMot(Dico dico, Mot mot);
+Dico supprimeMot(Mot mot, Dico dico);
 
 
 //----------Main: testing--------------------
@@ -42,8 +43,8 @@ int main() {
 	Mot mot = initMot("final");
 	Mot mot3 = initMot("avoir");
 	Mot mot4 = initMot("avare");
-
-	dico = initDico2(dico, mot);
+	printf("---------------------------------------------\n");
+	dico = initpDico(dico, mot);
 	rechercheMot(dico, mot);
 
 	prefixeMot(dico, mot3);
@@ -55,12 +56,14 @@ int main() {
 	rechercheMot(dico, mot3);
 	dico=ajoutMot2(mot4, dico);
 	rechercheMot(dico, mot4);
-
+	printf("---------------------------------------------\n");
+	dico=supprimeMot(mot3, dico);
+	printf("---------------------------------------------\n");
+	rechercheMot(dico, mot3);
 
 
 	return 0;
 }
-
 
 //----------Def fonctions-------------------
 Mot initMot(char *string)
@@ -335,4 +338,48 @@ Mot idprefixeMot(Dico dico, Mot mot)
 	}
 	return pMot;
 
+}
+
+
+Dico supprimeMot(Mot mot, Dico dico)
+{
+	printf("SUPPRIME: Début\n");
+	if (rechercheMot(dico, mot) == 0){
+		printf("SUPPRIME: le mot n'est pas dans le dico, impossible de le supprimer!\n");
+		return dico;
+	}
+
+	Cell *pDico = dico;
+	Cell *alt;
+	Cell *prec;
+	Car *pMot = mot;
+
+	pDico = searchBeginCell(dico, mot);
+	alt=pDico;
+
+	while (pDico->c != '$'){
+		printf("SUPPRIME: pDico = %c\n", pDico->c);
+		if (pDico->suiv->alt != NULL){
+			printf("SUPPRIME: pDico -> suiv -> alt != NULL\n");
+			prec=pDico;
+			alt=pDico->suiv;
+		}
+		pDico = pDico->suiv;
+		pMot = pMot->suiv;
+		if (pDico->c != pMot->c){
+			pDico=searchBeginCell(pDico, pMot);
+			//searchbegincell n'est pas censé pouvoir renvoyer 0 vu que le mot existe!
+		}
+
+	}
+	printf("SUPPRIME: alt = %c\n", alt->c);
+	prec->suiv = alt->alt;
+	while (pDico->c != '$'){
+		pDico = alt->suiv;
+		free(alt);
+		alt=pDico;
+	}
+	free(pDico);
+	printf("SUPPRIME: fin\n");
+	return dico;
 }
