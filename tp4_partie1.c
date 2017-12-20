@@ -37,6 +37,7 @@ int max (int a, int b, int c);
 void supprimeMot(char *mot, DicoABR *dico);
 void supprimerNode(NodeABR *node);
 NodeABR *successeur_plus_proche(NodeABR *node);
+void afficherDico(NodeABR *root, int nb_tab);
 
 
 // --------------------- Testing purposes ---------------------------------
@@ -58,8 +59,8 @@ int main(){
 	rechercheMot("ou", dictionnaire);
 	supprimeMot("finar", dictionnaire);
 	supprimeMot("fin", dictionnaire);
+	afficherDico(dictionnaire->root, 0);
 
-	displayDico(dictionnaire->root);
 	printf("----------------------------------------------------------\n");
 	suggestionMots(3, dictionnaire, "fi");
 
@@ -295,14 +296,18 @@ void afficherNode(NodeABR *node)
 	
 }
 
-
-void displayDico (NodeABR *node)
+void afficherDico(NodeABR *root, int nb_tab)
 {
-	if (node->left != NULL)
-		displayDico (node->left);
-	if (node->right != NULL)
-		displayDico (node->right);
-	printf ("     %s\n", node->cle);
+	int i = 0;
+	NodeABR *n1=root->left;
+	NodeABR *n2=root->right;
+	for (i=0; i<nb_tab; i++){
+		printf("    ");
+	}
+	printf("├── ");
+	printf("%s\n", root->cle);
+	if(n1 != NULL) afficherDico(n1, nb_tab + 1);
+	if(n2 != NULL) afficherDico(n2, nb_tab + 1);
 }
 
 //--------------------------------Suggestion mots ---------------------------------
