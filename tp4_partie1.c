@@ -34,6 +34,10 @@ NodeABR **compare_k(NodeABR *root, int k, char *souschaine);
 void afficherNodeTab(NodeABR **nodeTab);
 int max (int a, int b, int c);
 
+void supprimeMot(char *mot, DicoABR *dico);
+void supprimerNode(NodeABR *node);
+NodeABR *successeur_plus_proche(NodeABR *node);
+
 
 // --------------------- Testing purposes ---------------------------------
 int main(){
@@ -52,6 +56,8 @@ int main(){
 
 	rechercheMot("finar", &dictionnaire);
 	rechercheMot("ou", &dictionnaire);
+	supprimeMot("finar", &dictionnaire);
+	supprimeMot("fin", &dictionnaire);
 
 	displayDico(dictionnaire.root);
 	printf("----------------------------------------------------------\n");
