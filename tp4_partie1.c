@@ -35,7 +35,8 @@ void afficherNodeTab(NodeABR **nodeTab);
 int max (int a, int b, int c);
 
 void supprimeMot(char *mot, DicoABR *dico);
-void supprimerNode(NodeABR *node);
+void supprimerNode1(NodeABR *node, DicoABR *dico);
+void supprimerNode2(NodeABR *node, DicoABR *dico);
 void echangerNodes(NodeABR *n1, NodeABR *n2);
 NodeABR *successeur_plus_proche(NodeABR *node);
 void afficherDico(NodeABR *root, int nb_tab);
@@ -62,13 +63,25 @@ int main(){
 	supprimeMot("finar", dictionnaire);
 	supprimeMot("fin", dictionnaire);
 	afficherDico(dictionnaire->root, 0);
-	ajoutMot("x", dictionnaire);
-	afficherDico(dictionnaire->root, 0);
-	supprimeMot("ou", dictionnaire);
-	afficherDico(dictionnaire->root, 0);
+	
+	DicoABR *dico2 = initdico();
+	ajoutMot("c", dico2);
+	ajoutMot("f", dico2);
+	ajoutMot("b", dico2);
+	ajoutMot("a", dico2);
+	ajoutMot("d", dico2);
+	afficherDico(dico2->root, 0);
+	supprimeMot("f", dico2);
+	afficherDico(dico2->root, 0);
+	ajoutMot("g", dico2);
+	afficherDico(dico2->root, 0);
+	ajoutMot("e", dico2);
+	afficherDico(dico2->root, 0);
+	supprimeMot("c", dico2);
+	afficherDico(dico2->root, 0);
 
 	printf("----------------------------------------------------------\n");
-	suggestionMots(3, dictionnaire, "fi");
+	//suggestionMots(3, dictionnaire, "fi");
 
 	return 0;
 }
@@ -121,6 +134,7 @@ NodeABR *ajoutMot(char *value, DicoABR *dico)
 			while (compare != 0){
 				afficherNode(parcours);
 				compare = strcasecmp(value, parcours->cle);
+				printf("AJOUT : compare %d\n", compare);
 				if (compare < 0){
 					//Si compare < 0 il faut que la node soit à gauche
 					if (parcours->left == NULL){
@@ -198,74 +212,82 @@ void supprimeMot(char *mot, DicoABR *dico)
 
         printf("supprimeMot: mot=%s dico->root->cle=%s\n",mot,dico->root->cle);
         NodeABR *node = rechercheMot(mot, dico);
-        int compare=0, pas_de_parent=0, pas_de_fils=0, juste_un_fils_gauche=0, juste_un_fils_droit=0, deux_fils=0;
-
         if (node!=NULL){
-		printf("node->cle=%s\n",node->cle);
-		if(node->parent==NULL) pas_de_parent=1;
-
-                if(node->left==NULL && node->right==NULL) pas_de_fils=1;
-                else if(node->left==NULL) juste_un_fils_droit=1;
-                else if(node->right==NULL) juste_un_fils_gauche=1;
-                else deux_fils=1;
-
-		if(pas_de_fils == 0 && pas_de_parent == 0){    // Si le node à supprimer possède au moins un fils et n'est pas la racine
-		        compare = strcasecmp(node->cle,node->parent->cle);
-		        
-		        if(compare<0){
-				printf("c'est le fils gauche\n");
-				if(juste_un_fils_droit == 1) node->parent->left=node->right;
-				if(juste_un_fils_gauche == 1) node->parent->left=node->left;
-				if(deux_fils == 1){
-					NodeABR *s=successeur_plus_proche(node);
-					echangerNodes(s, node);
-					printf("s->cle=%s\n", s->cle);
-					printf("s->parent=%s\n", s->parent->cle);
-					s->parent->left = NULL; 
-					supprimerNode(s);
-					return;
-				}
-				
-		        }
-		        else if(compare>0){
-		                printf("c'est le fils droit\n");
-		                if(juste_un_fils_droit == 1) node->parent->right=node->right;
-		                if(juste_un_fils_gauche == 1) node->parent->right=node->left;
-		                if(deux_fils == 1){
-					NodeABR *s=successeur_plus_proche(node);
-					echangerNodes(s, node);
-					printf("s->cle=%s\n", s->cle);
-					printf("s->parent=%s\n", s->parent->cle);
-					s->parent->right = NULL;
-					supprimerNode(s);
-					return;
-				}
-		        }
-		        else{
-		                printf("Erreur dans l'arbre: node->cle=parent->cle\n");
-		        }
-		}
-		else if (pas_de_parent == 1){	// Si le node à supprimer est la racine, et possède au moins un fils
-			if(deux_fils == 1) dico->root=successeur_plus_proche(node);
-	                if(juste_un_fils_droit == 1) dico->root=node->right;
-	                if(juste_un_fils_gauche == 1) dico->root=node->left;
-			if(pas_de_fils == 1) dico->root=NULL;
-		}
-	
-                supprimerNode(node);
-                        
-        }
+		supprimerNode1(node, dico);
+	}
         else{
                 printf("supprimeMot: Erreur: Valeur \"%s\" non trouvée\n", mot);
         }
 }
-void supprimerNode(NodeABR *node){
-	printf("supprimeNode: node->cle=%s\n",node->cle);
+void supprimerNode1(NodeABR *node, DicoABR *dico){
+	printf("supprimeNode1: node->cle=%s dico->root->cle=%s\n",node->cle,dico->root->cle);
+	afficherDico(dico->root, 0);
+	int compare=0, pas_de_parent=0, pas_de_fils=0, juste_un_fils_gauche=0, juste_un_fils_droit=0, deux_fils=0;
+	if(node->parent==NULL) pas_de_parent=1;
+        if(node->left==NULL && node->right==NULL) pas_de_fils=1;
+        else if(node->left==NULL) juste_un_fils_droit=1;
+        else if(node->right==NULL) juste_un_fils_gauche=1;
+        else deux_fils=1;
+	printf("pas_de_parent=%d pas_de_fils=%d juste_un_fils_droit=%d juste_un_fils_gauche=%d deux_fils=%d\n",pas_de_parent, pas_de_fils, juste_un_fils_droit, juste_un_fils_gauche, deux_fils);
+	if(pas_de_parent == 0){    // Si le node à supprimer n'est pas la racine	        
+	        if(node->parent->left != NULL && node->parent->left == node){
+			printf("c'est le fils gauche\n");
+			if(pas_de_fils == 1) node->parent->left = NULL;
+			if(juste_un_fils_droit == 1) { node->parent->left=node->right; node->right->parent=node->parent; }
+			if(juste_un_fils_gauche == 1) { node->parent->left=node->left; node->left->parent=node->parent; }
+			if(deux_fils == 1){
+				NodeABR *s=successeur_plus_proche(node);
+				echangerNodes(s, node);
+				printf("s->cle=%s\n", s->cle);
+				printf("s->parent=%s\n", s->parent->cle);
+				supprimerNode1(s, dico);
+				return;
+			}
+			
+	        }
+	        else if(node->parent->right != NULL && node->parent->right == node){
+	                printf("c'est le fils droit\n");
+			if(pas_de_fils == 1) node->parent->right = NULL;
+	                if(juste_un_fils_droit == 1) { node->parent->right=node->right; node->right->parent=node->parent; }
+	                if(juste_un_fils_gauche == 1) { node->parent->right=node->left; node->left->parent=node->parent; }
+	                if(deux_fils == 1){
+				NodeABR *s=successeur_plus_proche(node);
+				echangerNodes(s, node);
+				printf("s->cle=%s\n", s->cle);
+				printf("s->parent=%s\n", s->parent->cle);
+				supprimerNode1(s, dico);
+				return;
+			}
+	        }
+	        else{
+	                printf("Erreur dans l'arbre\n");
+	        }
+	}
+	else if (pas_de_parent == 1){	// Si le node à supprimer est la racine
+		if(deux_fils == 1){
+			NodeABR *s=successeur_plus_proche(node);
+			echangerNodes(s, node);
+			printf("s->cle=%s\n", s->cle);
+			printf("s->parent=%s\n", s->parent->cle);
+			supprimerNode1(s, dico);
+			return;
+		}
+                if(juste_un_fils_droit == 1) dico->root=node->right;
+                if(juste_un_fils_gauche == 1) dico->root=node->left;
+		if(pas_de_fils == 1) dico->root=NULL;
+	}
+
+        supprimerNode2(node, dico);
+}
+
+void supprimerNode2(NodeABR *node, DicoABR *dico){
+	printf("supprimeNode2: node->cle=%s\n",node->cle);
 	node->cle = NULL;
 	node->parent = NULL;
 	node->left = NULL;
 	node->right = NULL;
 	free(node);
+	dico->nb--;
 }
 
 void echangerNodes(NodeABR *n1, NodeABR *n2){
@@ -277,9 +299,8 @@ void echangerNodes(NodeABR *n1, NodeABR *n2){
 NodeABR *successeur_plus_proche(NodeABR *node){
     printf("successeur_plus_proche(%s)",node->cle);
         NodeABR *s=node->right;
-    while (s->left != NULL || s->right != NULL){
-        if(s->left != NULL) s=s->left;
-        else s=s->right;
+    while (s->left != NULL){
+	s=s->left;
     }
     printf("= %s\n",s->cle);
     return s;
