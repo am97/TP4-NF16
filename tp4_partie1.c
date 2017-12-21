@@ -229,55 +229,40 @@ void supprimerNode1(NodeABR *node, DicoABR *dico){
         else if(node->right==NULL) juste_un_fils_gauche=1;
         else deux_fils=1;
 	printf("pas_de_parent=%d pas_de_fils=%d juste_un_fils_droit=%d juste_un_fils_gauche=%d deux_fils=%d\n",pas_de_parent, pas_de_fils, juste_un_fils_droit, juste_un_fils_gauche, deux_fils);
-	if(pas_de_parent == 0){    // Si le node à supprimer n'est pas la racine	        
-	        if(node->parent->left != NULL && node->parent->left == node){
-			printf("c'est le fils gauche\n");
-			if(pas_de_fils == 1) node->parent->left = NULL;
-			if(juste_un_fils_droit == 1) { node->parent->left=node->right; node->right->parent=node->parent; }
-			if(juste_un_fils_gauche == 1) { node->parent->left=node->left; node->left->parent=node->parent; }
-			if(deux_fils == 1){
-				NodeABR *s=successeur_plus_proche(node);
-				echangerNodes(s, node);
-				printf("s->cle=%s\n", s->cle);
-				printf("s->parent=%s\n", s->parent->cle);
-				supprimerNode1(s, dico);
-				return;
-			}
-			
-	        }
-	        else if(node->parent->right != NULL && node->parent->right == node){
-	                printf("c'est le fils droit\n");
-			if(pas_de_fils == 1) node->parent->right = NULL;
-	                if(juste_un_fils_droit == 1) { node->parent->right=node->right; node->right->parent=node->parent; }
-	                if(juste_un_fils_gauche == 1) { node->parent->right=node->left; node->left->parent=node->parent; }
-	                if(deux_fils == 1){
-				NodeABR *s=successeur_plus_proche(node);
-				echangerNodes(s, node);
-				printf("s->cle=%s\n", s->cle);
-				printf("s->parent=%s\n", s->parent->cle);
-				supprimerNode1(s, dico);
-				return;
-			}
-	        }
-	        else{
-	                printf("Erreur dans l'arbre\n");
-	        }
-	}
-	else if (pas_de_parent == 1){	// Si le node à supprimer est la racine
-		if(deux_fils == 1){
-			NodeABR *s=successeur_plus_proche(node);
-			echangerNodes(s, node);
-			printf("s->cle=%s\n", s->cle);
-			printf("s->parent=%s\n", s->parent->cle);
-			supprimerNode1(s, dico);
-			return;
-		}
-                if(juste_un_fils_droit == 1) dico->root=node->right;
-                if(juste_un_fils_gauche == 1) dico->root=node->left;
-		if(pas_de_fils == 1) dico->root=NULL;
-	}
 
-        supprimerNode2(node, dico);
+        if(deux_fils == 1){
+		NodeABR *s=successeur_plus_proche(node);
+		echangerNodes(s, node);
+		printf("s->cle=%s\n", s->cle);
+		printf("s->parent=%s\n", s->parent->cle);
+		supprimerNode1(s, dico);
+		return;
+	}
+	else{
+		if(pas_de_parent == 0){    // Si le node à supprimer n'est pas la racine	        
+			if(node->parent->left != NULL && node->parent->left == node){
+				printf("c'est le fils gauche\n");
+				if(pas_de_fils == 1) node->parent->left = NULL;
+				if(juste_un_fils_droit == 1) { node->parent->left=node->right; node->right->parent=node->parent; }
+				if(juste_un_fils_gauche == 1) { node->parent->left=node->left; node->left->parent=node->parent; }			
+			}
+			else if(node->parent->right != NULL && node->parent->right == node){
+			        printf("c'est le fils droit\n");
+				if(pas_de_fils == 1) node->parent->right = NULL;
+			        if(juste_un_fils_droit == 1) { node->parent->right=node->right; node->right->parent=node->parent; }
+			        if(juste_un_fils_gauche == 1) { node->parent->right=node->left; node->left->parent=node->parent; }
+			}
+			else{
+			        printf("Erreur dans l'arbre\n");
+			}
+		}
+		else if (pas_de_parent == 1){	// Si le node à supprimer est la racine
+		        if(juste_un_fils_droit == 1) dico->root=node->right;
+		        if(juste_un_fils_gauche == 1) dico->root=node->left;
+			if(pas_de_fils == 1) dico->root=NULL;
+		}
+        	supprimerNode2(node, dico);
+	}
 }
 
 void supprimerNode2(NodeABR *node, DicoABR *dico){
