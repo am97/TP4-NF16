@@ -350,7 +350,7 @@ void afficherNodeTab(NodeABR **nodeTab)
 
 NodeABR **compare_k(NodeABR *root, int k, char *souschaine)
 {
-	if (DEBUG == 1) printf("SUGGESTION: Entrée\n");
+	if (DEBUG == 1) printf("SUGGESTION: Entrée dans compare_k. root->cle=%s k=%d souschaine=%s\n", root->cle, k, souschaine);
 	NodeABR **nodeTab = malloc (sizeof (nodeTab));
 
 	if (root == NULL ){
@@ -476,8 +476,8 @@ NodeABR **compare_k(NodeABR *root, int k, char *souschaine)
 	for (i=0; i<k; i++){
 		tabDroit[i] = NULL;
 		tabGauche[i] = NULL;
-		//free(tabDroit);
-		//free(tabGauche);
+		free(tabDroit);
+		free(tabGauche);
 	}
 
 	if (DEBUG == 1) printf("SUGGESTION: return nodeTab.\n");
