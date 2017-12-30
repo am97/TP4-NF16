@@ -375,8 +375,8 @@ NodeABR **compare_k(NodeABR *root, int k, char *souschaine)
 
 	//si l'un des deux sous-arbres est vide, alors le tableau final sera celui de l'autre arbre
 	if (root->left == NULL){
-		nodeTab = compare_k(root->right, k, souschaine);
 		if (DEBUG == 1) printf("SUGGESTION: On retourne l'arbre droit (gauche vide).\n");
+		nodeTab = compare_k(root->right, k, souschaine);
 		if (DEBUG == 1) afficherNodeTab(nodeTab);
 		if (DEBUG == 1) printf("SUGGESTION: Retour\n");
 		return nodeTab;
@@ -384,13 +384,14 @@ NodeABR **compare_k(NodeABR *root, int k, char *souschaine)
 
 
 	if (root->right == NULL){
-		nodeTab = compare_k(root->left, k, souschaine);
 		if (DEBUG == 1) printf("SUGGESTION: On retourne l'arbre gauche (droit vide).\n");
+		nodeTab = compare_k(root->left, k, souschaine);
 		if (DEBUG == 1) afficherNodeTab(nodeTab);
 		if (DEBUG == 1) printf("SUGGESTION: Retour\n");
 		return nodeTab;
 	}
 
+	if (DEBUG == 1) printf("SUGGESTION: 2 fils\n");
 
 	tabGauche = compare_k(root->left, k, souschaine);
 	if (DEBUG == 1) afficherNodeTab(tabGauche);
@@ -407,6 +408,7 @@ NodeABR **compare_k(NodeABR *root, int k, char *souschaine)
 	int temp;
 
 	while (tabGauche[i]!=NULL && tabDroit[j]!= NULL && fin<k){
+		printf("SUGGESTION: Début while: i=%d j=%d fin=%d\n",i,j,fin);
 
 		gauche = compare_souschaine(tabGauche[i], souschaine);
 		droit = compare_souschaine(tabDroit[j], souschaine);
@@ -450,6 +452,7 @@ NodeABR **compare_k(NodeABR *root, int k, char *souschaine)
 				}// Le cas ou les deux mots sont identiques n'est pas traité (contrainte d'insertion)
 			}
 		}
+		printf("SUGGESTION: Fin while: i=%d j=%d fin=%d\n",i,j,fin);
 
 		
 	}
@@ -476,8 +479,8 @@ NodeABR **compare_k(NodeABR *root, int k, char *souschaine)
 	for (i=0; i<k; i++){
 		tabDroit[i] = NULL;
 		tabGauche[i] = NULL;
-		free(tabDroit);
-		free(tabGauche);
+		//free(tabDroit);
+		//free(tabGauche);
 	}
 
 	if (DEBUG == 1) printf("SUGGESTION: return nodeTab.\n");
