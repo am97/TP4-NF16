@@ -4,6 +4,10 @@
 #include <math.h>
 #include "functions_library_dico.h"
 
+#include "tp4_partie1.c"
+#include "tp4_partie2.c"
+#include "tp4_partie3.c"
+
 int Partie1();
 int Partie2();
 
@@ -36,8 +40,8 @@ int Partie1()
 	int choix = -1, k;
 	char *str;
 	NodeABR node;
-	DicoABR dico=initdico();
-	printf("\n\n\nNous avons un dictionnaire vide. Que voulez-vous faire ?\n", );
+	DicoABR *dico=initdico();
+	printf("\n\n\nNous avons un dictionnaire vide. Que voulez-vous faire ?\n");
 	while (choix != 0){
 		printf("1/ ajouter un mot\n");
 		printf("2/ Rechercher un mot\n");
@@ -64,7 +68,7 @@ int Partie1()
 				break;
 
 			case 3:
-				afficherdico(dico.root, 3);
+				afficherdico(dico->root, 3);
 				break;
 
 			case 4:
@@ -87,7 +91,7 @@ int Partie2()
 	char *str;
 	Dico dico;
 	Mot mot;
-	printf("\n\n\nNous avons un dictionnaire vide. Que voulez-vous faire ?\n", );
+	printf("\n\n\nNous avons un dictionnaire vide. Que voulez-vous faire ?\n");
 	while (choix != 0){
 		printf("1/ ajouter un mot\n");
 		printf("2/ Rechercher un mot\n");

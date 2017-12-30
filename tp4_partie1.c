@@ -2,48 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#define MAX 25
-
-typedef struct NodeABR {
-	char* cle;
-	struct NodeABR *parent;
-	struct NodeABR *left;
-	struct NodeABR *right;
-} NodeABR;
-
-
-typedef struct DicoABR {
-	NodeABR *root;
-	int nb; // le nombre de mots dans le dictionnaire
-}DicoABR;
-
-
-
-
-NodeABR *rechercheMot(char *mot, DicoABR *dico);
-DicoABR *initdico ();
-void afficherNode(NodeABR *node);
-NodeABR *initNode(char *value);
-NodeABR *ajoutMot(char *value, DicoABR *dico);
-NodeABR **suggestionMots (int k, DicoABR *dico, char *souschaine);
-int compare_souschaine(NodeABR *node, char *souschaine);
-//void insertion_tri (int tab[], int value, int i, int length);
-//int indice_tri (int tab[], int value);
-void displayDico (NodeABR *node);
-NodeABR **compare_k(NodeABR *root, int k, char *souschaine);
-void afficherNodeTab(NodeABR **nodeTab);
-int max (int a, int b, int c);
-
-void supprimeMot(char *mot, DicoABR *dico);
-void supprimerNode1(NodeABR *node, DicoABR *dico);
-void supprimerNode2(NodeABR *node, DicoABR *dico);
-void echangerNodes(NodeABR *n1, NodeABR *n2);
-NodeABR *successeur_plus_proche(NodeABR *node);
-void afficherDico(NodeABR *root, int nb_tab);
-
 
 // --------------------- Testing purposes ---------------------------------
-int main(){
+/*int main(){
 
 
 
@@ -87,7 +48,7 @@ int main(){
 }
 
 //----------------------------------------------------------------------
-
+*/
 
 
 DicoABR *initdico ()
