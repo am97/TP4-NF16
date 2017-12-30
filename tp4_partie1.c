@@ -408,7 +408,7 @@ NodeABR **compare_k(NodeABR *root, int k, char *souschaine)
 	int temp;
 
 	while (tabGauche[i]!=NULL && tabDroit[j]!= NULL && fin<k){
-		printf("SUGGESTION: Début while: i=%d j=%d fin=%d\n",i,j,fin);
+		if (DEBUG == 1) printf("SUGGESTION: Début while: i=%d j=%d fin=%d\n",i,j,fin);
 
 		gauche = compare_souschaine(tabGauche[i], souschaine);
 		droit = compare_souschaine(tabDroit[j], souschaine);
@@ -452,7 +452,7 @@ NodeABR **compare_k(NodeABR *root, int k, char *souschaine)
 				}// Le cas ou les deux mots sont identiques n'est pas traité (contrainte d'insertion)
 			}
 		}
-		printf("SUGGESTION: Fin while: i=%d j=%d fin=%d\n",i,j,fin);
+		if (DEBUG == 1) printf("SUGGESTION: Fin while: i=%d j=%d fin=%d\n",i,j,fin);
 
 		
 	}
