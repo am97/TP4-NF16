@@ -28,7 +28,6 @@ typedef struct DicoABR {
 DicoABR *initdico ();
 NodeABR *initNode(char *value);
 void afficherNode(NodeABR *node);
-void afficherNodeTab(NodeABR **nodeTab);
 void afficherDico(NodeABR *root, int nb_tab);
 
 NodeABR *rechercheMot(char *mot, DicoABR *dico);
@@ -40,6 +39,7 @@ void echangerNodes(NodeABR *n1, NodeABR *n2);
 NodeABR *successeur_plus_proche(NodeABR *node);
 
 NodeABR **suggestionMots (int k, DicoABR *dico, char *souschaine);
+void afficherNodeTab(NodeABR **nodeTab);
 int compare_souschaine(NodeABR *node, char *souschaine);
 NodeABR **compare_k(NodeABR *root, int k, char *souschaine);
 int max (int a, int b, int c);

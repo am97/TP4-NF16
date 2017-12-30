@@ -103,18 +103,6 @@ void afficherNode(NodeABR *node)
 	
 }
 
-void afficherNodeTab(NodeABR **nodeTab)
-{
-	if (DEBUG == 1) printf("NODETAB\n");
- 	int	i=0;
-	while(nodeTab[i+1]!=NULL) {
-		printf(" - %s",nodeTab[i]);
-		if (DEBUG == 1) afficherNode(nodeTab[i]);
-		i++;
-	}
-	if (DEBUG == 1) printf("NODETAB FIN\n");
-}
-
 void afficherDico(NodeABR *root, int nb_tab)
 {
 	int i = 0;
@@ -323,6 +311,18 @@ NodeABR **suggestionMots (int k, DicoABR *dico, char *souschaine)
 
 	return nodeTab;
 
+}
+
+void afficherNodeTab(NodeABR **nodeTab)
+{
+	if (DEBUG == 1) printf("NODETAB\n");
+ 	int	i=0;
+	while(nodeTab[i+1]!=NULL) {
+		printf(" - %s",nodeTab[i]);
+		if (DEBUG == 1) afficherNode(nodeTab[i]);
+		i++;
+	}
+	if (DEBUG == 1) printf("NODETAB FIN\n");
 }
 
 int compare_souschaine(NodeABR *node, char *souschaine)
