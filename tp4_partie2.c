@@ -2,42 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#define MAX 25
-
-//----------Structures*--------------------
-typedef struct Car
-{
-	char c;
-	struct Car *suiv;
-}Car;
-
-typedef struct Cellule
-{
-	char c;
-	struct Cellule *suiv;
-	struct Cellule *alt;
-}Cell;
-
-typedef Car *Mot;
-typedef Cell *Dico;
-
-
-//--------------Fonctions--------------------
-
-Dico initpDico(Dico dico, Mot mot);
-void afficheMot(Mot mot);
-Mot initMot(char *string);
-Dico searchBeginCell(Dico dico, Mot mot);
-Dico prefixeMot(Dico dico, Mot mot);
-int rechercheMot2(Dico dico, Mot mot);
-Dico ajoutMot2(Mot mot, Dico dico);
-Mot idprefixeMot(Dico dico, Mot mot);
-Dico supprimeMot2(Mot mot, Dico dico);
-
 
 
 //----------Main: testing--------------------
-int main() {
+/*int main() {
 
 	Dico dico = malloc(sizeof(Dico));
 	Mot mot2 = initMot("fin");
@@ -64,7 +32,7 @@ int main() {
 
 
 	return 0;
-}
+}*/
 
 
 //----------Def fonctions-------------------

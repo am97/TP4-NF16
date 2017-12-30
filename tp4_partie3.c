@@ -75,14 +75,19 @@ int verimot_ABR(DicoABR * dico){
 			printf("VERIMOT: Ce mot est déjà présent dans le dictionnaire. \n");
 			return -1;
 		} else {
-			printf("VERIMOT: Ce mot n'est pas encore présent dans le dictionnaire. Voulez vous...\n1/ Le remplacer avec une suggestion?\n 2/ L'ajouter au dictionnaire?\n");
-			int choix = -1, k=1;
+			printf("VERIMOT: Ce mot n'est pas encore présent dans le dictionnaire. Voulez vous...\n 1/ Le remplacer avec une suggestion?\n 2/ L'ajouter au dictionnaire?\n");
+			int choix = -1, k=3;
+			char * correction;
+			scanf("%d", &choix);
 			switch(choix){
 				case 0:
 					exit(0);
 					break;
 				case 1:
 					suggestionMots(k, dico, buf);
+					printf("Veuillez recopier celle que vous souhaitez utiliser:");
+					scanf("%s", &correction);
+					
 					break;
 				case 2:
 					ajoutMot(buf, dico);
