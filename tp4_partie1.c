@@ -78,6 +78,91 @@ NodeABR *initNode(char *value)
 	return new;
 }
 
+void afficherNode(NodeABR *node)
+{
+	if(node == NULL){
+		printf("NODE: Pas de node à afficher.\n");
+	} else {
+		printf("\nnode '%s'\n", node->cle);
+
+		if (node->parent != NULL)
+			printf("parent '%s'\n", node->parent->cle);
+		else
+			printf("Pas de parent\n");
+
+		if (node->left != NULL)
+			printf("fils gauche '%s'\n", node->left->cle);
+		else
+			printf("Pas de fils gauche.\n");
+
+		if (node->right != NULL)
+			printf("fils droit '%s'\n\n", node->right->cle);
+		else
+			printf("Pas de fils droit\n\n");
+	}
+	
+}
+
+void afficherNodeTab(NodeABR **nodeTab)
+{
+	if (DEBUG == 1) printf("NODETAB\n");
+ 	int	i=0;
+	while(nodeTab[i+1]!=NULL) {
+		printf(" - %s",nodeTab[i]);
+		if (DEBUG == 1) afficherNode(nodeTab[i]);
+		i++;
+	}
+	if (DEBUG == 1) printf("NODETAB FIN\n");
+}
+
+void afficherDico(NodeABR *root, int nb_tab)
+{
+	int i = 0;
+	for (i=0; i<nb_tab; i++){
+		printf("    ");
+	}
+	printf("├── ");
+	printf("%s\n", root->cle);
+	if(root->left != NULL) afficherDico(root->left, nb_tab + 1);
+	if(root->right != NULL) afficherDico(root->right, nb_tab + 1);
+}
+
+NodeABR *rechercheMot(char *mot, DicoABR *dico)
+{
+	if (dico->root == NULL){
+		printf("RECHERCHE : L'arbre est vide, il n'y a rien à chercher.");
+		return NULL;
+	}
+	printf("RECHERCHE : on recherche : %s\n", mot);
+	NodeABR *parcours = dico->root;
+	if (DEBUG == 1) printf("RECHERCHE : parcours '%s'\n", parcours->cle);
+	int compare = -1;
+
+	//while (compare != 0 && parcours != NULL){
+	while (parcours != NULL){
+		if (DEBUG == 1) printf("RECHERCHE : while\n");
+		compare = strcasecmp(mot, parcours->cle);
+		if (DEBUG == 1) printf("RECHERCHE : parcours '%s'\n", parcours->cle);
+		if (DEBUG == 1) printf("RECHERCHE : compare %d\n", compare);
+		if (compare > 0){
+			parcours = parcours->right;
+		} else if (compare < 0){
+			parcours = parcours->left;
+		} else if (compare == 0){
+			if (DEBUG == 1) printf("RECHERCHE : cond compare is 0\n");
+			break;
+		}
+	}
+
+	if (parcours != NULL){
+		afficherNode(parcours);
+		return parcours;
+	} else {
+		printf("RECHERCHE : mot non trouvé. \n");
+		return NULL;
+	}
+}
+
 NodeABR *ajoutMot(char *value, DicoABR *dico)
 //Ajoute un mot au dictionnaire = un node à l'ABR
 {
@@ -131,45 +216,6 @@ NodeABR *ajoutMot(char *value, DicoABR *dico)
 		}
 	}
 }
-
-
-
-NodeABR *rechercheMot(char *mot, DicoABR *dico)
-{
-	if (dico->root == NULL){
-		printf("RECHERCHE : L'arbre est vide, il n'y a rien à chercher.");
-		return NULL;
-	}
-	printf("RECHERCHE : on recherche : %s\n", mot);
-	NodeABR *parcours = dico->root;
-	if (DEBUG == 1) printf("RECHERCHE : parcours '%s'\n", parcours->cle);
-	int compare = -1;
-
-	//while (compare != 0 && parcours != NULL){
-	while (parcours != NULL){
-		if (DEBUG == 1) printf("RECHERCHE : while\n");
-		compare = strcasecmp(mot, parcours->cle);
-		if (DEBUG == 1) printf("RECHERCHE : parcours '%s'\n", parcours->cle);
-		if (DEBUG == 1) printf("RECHERCHE : compare %d\n", compare);
-		if (compare > 0){
-			parcours = parcours->right;
-		} else if (compare < 0){
-			parcours = parcours->left;
-		} else if (compare == 0){
-			if (DEBUG == 1) printf("RECHERCHE : cond compare is 0\n");
-			break;
-		}
-	}
-
-	if (parcours != NULL){
-		afficherNode(parcours);
-		return parcours;
-	} else {
-		printf("RECHERCHE : mot non trouvé. \n");
-		return NULL;
-	}
-}
-
 
 void supprimeMot(char *mot, DicoABR *dico)
 {
@@ -268,44 +314,16 @@ NodeABR *successeur_plus_proche(NodeABR *node){
     return s;
 }
 
-void afficherNode(NodeABR *node)
-{
-	if(node == NULL){
-		printf("NODE: Pas de node à afficher.\n");
-	} else {
-		printf("\nnode '%s'\n", node->cle);
-
-		if (node->parent != NULL)
-			printf("parent '%s'\n", node->parent->cle);
-		else
-			printf("Pas de parent\n");
-
-		if (node->left != NULL)
-			printf("fils gauche '%s'\n", node->left->cle);
-		else
-			printf("Pas de fils gauche.\n");
-
-		if (node->right != NULL)
-			printf("fils droit '%s'\n\n", node->right->cle);
-		else
-			printf("Pas de fils droit\n\n");
-	}
-	
-}
-
-void afficherDico(NodeABR *root, int nb_tab)
-{
-	int i = 0;
-	for (i=0; i<nb_tab; i++){
-		printf("    ");
-	}
-	printf("├── ");
-	printf("%s\n", root->cle);
-	if(root->left != NULL) afficherDico(root->left, nb_tab + 1);
-	if(root->right != NULL) afficherDico(root->right, nb_tab + 1);
-}
-
 //--------------------------------Suggestion mots ---------------------------------
+
+NodeABR **suggestionMots (int k, DicoABR *dico, char *souschaine)
+{
+	if (DEBUG == 1) printf("suggestionMots(%d,%s,%s):\n",k,dico->root->cle,souschaine);
+	NodeABR **nodeTab = compare_k(dico->root, k, souschaine);
+
+	return nodeTab;
+
+}
 
 int compare_souschaine(NodeABR *node, char *souschaine)
 //renvoie le nombre de char dans la sous chaine identique au mot
@@ -324,29 +342,6 @@ int compare_souschaine(NodeABR *node, char *souschaine)
 
 	return count;
 }//Elle fonctionne
-
-
-
-NodeABR **suggestionMots (int k, DicoABR *dico, char *souschaine)
-{
-	if (DEBUG == 1) printf("suggestionMots(%d,%s,%s):\n",k,dico->root->cle,souschaine);
-	NodeABR **nodeTab = compare_k(dico->root, k, souschaine);
-
-	return nodeTab;
-
-}
-
-void afficherNodeTab(NodeABR **nodeTab)
-{
-	if (DEBUG == 1) printf("NODETAB\n");
- 	int	i=0;
-	while(nodeTab[i+1]!=NULL) {
-		printf(" - %s",nodeTab[i]);
-		if (DEBUG == 1) afficherNode(nodeTab[i]);
-		i++;
-	}
-	if (DEBUG == 1) printf("NODETAB FIN\n");
-}
 
 NodeABR **compare_k(NodeABR *root, int k, char *souschaine)
 {

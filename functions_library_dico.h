@@ -25,24 +25,25 @@ typedef struct DicoABR {
 
 
 // --- Déclarations des fonctions ---
-NodeABR *rechercheMot(char *mot, DicoABR *dico);
 DicoABR *initdico ();
-void afficherNode(NodeABR *node);
 NodeABR *initNode(char *value);
-NodeABR *ajoutMot(char *value, DicoABR *dico);
-NodeABR **suggestionMots (int k, DicoABR *dico, char *souschaine);
-int compare_souschaine(NodeABR *node, char *souschaine);
-void displayDico (NodeABR *node);
-NodeABR **compare_k(NodeABR *root, int k, char *souschaine);
+void afficherNode(NodeABR *node);
 void afficherNodeTab(NodeABR **nodeTab);
-int max (int a, int b, int c);
+void afficherDico(NodeABR *root, int nb_tab);
 
+NodeABR *rechercheMot(char *mot, DicoABR *dico);
+NodeABR *ajoutMot(char *value, DicoABR *dico);
 void supprimeMot(char *mot, DicoABR *dico);
 int supprimerNode1(NodeABR *node, DicoABR *dico);
 int supprimerNode2(NodeABR *node, DicoABR *dico);
 void echangerNodes(NodeABR *n1, NodeABR *n2);
 NodeABR *successeur_plus_proche(NodeABR *node);
-void afficherDico(NodeABR *root, int nb_tab);
+
+NodeABR **suggestionMots (int k, DicoABR *dico, char *souschaine);
+int compare_souschaine(NodeABR *node, char *souschaine);
+NodeABR **compare_k(NodeABR *root, int k, char *souschaine);
+int max (int a, int b, int c);
+
 
 //	PARTIE II
 //
